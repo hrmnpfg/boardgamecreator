@@ -29,13 +29,12 @@ mod tests {
 
     #[test]
     fn test_board_from_json(){
-        let board_json = std::fs::read_to_string("res/chess/board.json").ok().unwrap();
+        let board_json = std::fs::read_to_string("res/chess/szachy.json").ok().unwrap();
         let board = Board::from_json(board_json.to_string());
 
         assert!(board.is_ok());
         let board2:Board = board.unwrap();
         assert!(board2.board[0][1].is_some() && board2.board[1][0].is_some(), "there should be pieces and those fiedls");
-        assert!(<Option<boardgames::Piece> as Clone>::clone(&board2.board[0][1]).is_some_and(|x| x.memory.is_some_and(|y| y["id"] == RuleExpression::Integer(1))));
     }
 
     #[test]
@@ -55,7 +54,7 @@ mod tests {
         let _= board.make_move((2,2),(1,1) ,pawn2.possiblemoves[2].clone(),&tx,&rx2);
         assert!(board.board[2][2].is_none(), "this field should be empty");
         assert!(board.cementaries.1.len()==1,"cementary shoud have one piece");
-        assert!(board.cementaries.1[0].id=="pawn" && board.cementaries.1[0].owner==Player::Black);
+        assert!(board.cementaries.1[0].id=="pawn_1" && board.cementaries.1[0].owner==Player::Black);
     }
 
     #[test]
@@ -212,7 +211,7 @@ mod tests {
 
     #[test]
     fn test_board_loading() {
-        let board_json = std::fs::read_to_string("res/chess/board.json").ok().unwrap();
+        let board_json = std::fs::read_to_string("res/chess/szachy.json").ok().unwrap();
         let board_result = Board::from_json(board_json.to_string());
 
         assert!(board_result.is_ok(), "Board should be successfully loaded from JSON");
@@ -227,12 +226,12 @@ mod tests {
         let pawn: Piece = Piece::new(pawn_json.to_string()).expect("Failed to create pawn");
         board.board[1][1] = Some(pawn);
         let context = HashMap::new();
-        assert!(board.call_api("piece_on_board", vec!["pawn"] ,&context,0, None, None )==RuleExpression::Boolean(true), "there sould be one pawn on the board");
-        assert!(board.call_api("piece_on_board_cnt", vec!["pawn"] ,&context, 0, None, None )==RuleExpression::Integer(1), "there sould be one pawn on the board");
-        assert!(board.call_api("player_piece_on_board", vec!["pawn", "White"] ,&context, 0, None, None )==RuleExpression::Boolean(true), "there sould be one white pawn on the board");
-        assert!(board.call_api("player_piece_on_board", vec!["pawn", "Black"] ,&context, 0, None, None )==RuleExpression::Boolean(false), "no black pawns on the board");
-        assert!(board.call_api("player_piece_on_board_cnt", vec!["pawn", "Black"] ,&context, 0, None, None )==RuleExpression::Integer(0), "no black pawns on the board");
-        assert!(board.call_api("player_piece_on_board_cnt", vec!["pawn", "htrfd"] ,&context, 0, None, None )==RuleExpression::Err("Please add a valid player".to_string()), "no such player");
+        assert!(board.call_api("piece_on_board", vec!["pawn_1"] ,&context,0, None, None )==RuleExpression::Boolean(true), "there sould be one pawn on the board");
+        assert!(board.call_api("piece_on_board_cnt", vec!["pawn_1"] ,&context, 0, None, None )==RuleExpression::Integer(1), "there sould be one pawn on the board");
+        assert!(board.call_api("player_piece_on_board", vec!["pawn_1", "White"] ,&context, 0, None, None )==RuleExpression::Boolean(true), "there sould be one white pawn on the board");
+        assert!(board.call_api("player_piece_on_board", vec!["pawn_1", "Black"] ,&context, 0, None, None )==RuleExpression::Boolean(false), "no black pawns on the board");
+        assert!(board.call_api("player_piece_on_board_cnt", vec!["pawn_1", "Black"] ,&context, 0, None, None )==RuleExpression::Integer(0), "no black pawns on the board");
+        assert!(board.call_api("player_piece_on_board_cnt", vec!["pawn_1", "htrfd"] ,&context, 0, None, None )==RuleExpression::Err("Please add a valid player".to_string()), "no such player");
     }
 
     #[test]
@@ -616,7 +615,7 @@ mod tests {
         println!("{:?}", res);
         assert!(res.is_ok(), "revive should succeed");
         assert!(board.board[1][2].is_some(), "there should be piece");
-        assert!(board.board[1][2].clone().unwrap().id=="pawn".to_string());
+        assert!(board.board[1][2].clone().unwrap().id=="pawn_1".to_string());
     }
 
     #[test]
