@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet" type="text/css" href="styles.css">
+<style>
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(<%= dims[1]%>, 40px);
+        grid-auto-rows: 40px;
+        gap: 5px;
+      }
+      .cell {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+      }
+      .cell.filled {
+        background-color: #4CAF50;
+        color: white;
+      }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        var userid = '<%= userid %>';
+        socket.emit('join room',roomid);
+        socket.on('board', function(data, data2) {
+            let pomi = document.getElementById("grid");
+            let pom2 = document.getElementById("cement");
+            pomi.innerHTML = data;
+            pom2.innerHTML = data2;
+        });
+
+</script>
+<title>Document</title>
+</head>
+    <body class="container">
+        <header>Boardgames</header>
+        <h1>Obecny stan planszy</h1>
+        <div class="grid" id="grid">
+        <%
+            const rows = board.split('<br>').filter(row => row.trim() !== '');
+            rows.forEach(row => {
+            const cells = row.trim().split(' ');
+            cells.forEach(cell => {
+        %>
+            <div class="cell <%= cell !== '.' ? 'filled' : '' %>">
+            <%= cell !== '.' ? cell : '' %>
+            </div>
+        <% }); }); %>
+        </div>
+        <div id="cement">
+            White pieces killed: <text id="wc"><%=white_killed%></text></br>
+            Black pieces killed: <text id="bc"><%=black_killed%></text>
+        </div>
+        Gracz: <text><%= username %></text>
+            <form method="POST" id="commands" action="/game2?room=<%= room.room_ID %>">
+                <% if (room) { %>
+                Type a command: <input type="text" name="command" id="command" required/>
+                <button class="openedRoomsButton"> Wyślij </button>
+            <% } %>
+        </form>
+        <div class="prompt" id="prompt">
+        </div>
+        <script>
+            var form = document.getElementById("commands");
+            form.addEventListener("submit", async function handleSubmit(event) {
+                event.preventDefault();
+                var grid = document.getElementById("grid");
+                var data = new FormData(event.target);
+                var formDataString = new URLSearchParams(data).toString();
+                var prompt = document.getElementById("prompt");
+                var wc = document.getElementById("wc");
+                var bc = document.getElementById("bc");
+                let cement = document.getElementById("cement");
+
+                try {
+                    var res = await fetch(event.target.action, {
+                        method: form.method,
+                        body: formDataString,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    });
+
+                    if (res.ok) {
+                        const data2 = await res.json();
+                        console.log(data2);
+                        if (data2.redirect) {
+                            window.location.href = data2.redirect;
+                            return;
+                        }
+
+                        if(data2.board){
+                            grid.innerHTML = "";
+                            const rows = data2.board.split("<br>").filter(row => row.trim() !== "");
+                            rows.forEach(row => {
+                                const cells = row.trim().split(" ");
+                                cells.forEach(cell => {
+                                    const cellDiv = document.createElement("div");
+                                    cellDiv.className = `cell ${cell !== "." ? "filled" : ""}`;
+                                    cellDiv.textContent = cell !== "." ? cell : "";
+                                    grid.appendChild(cellDiv);
+                                });
+                            });
+                        }
+
+                        if(data2.ended){
+                            cement.innerHTML = data2.resp;
+                        }
+                        else{
+                            if(data2.prompt){
+                                prompt.textContent = data2.prompt;
+                            }
+
+                            if(data2.wc){
+                                wc.textContent = data2.wc;
+                            }
+                            if(data2.bc){
+                                bc.textContent = data2.bc;
+                            }
+                        }
+                        form.reset()
+                    } else {
+                        const data = await res.json();
+                        if (data.errors) {
+                            status.textContent = data.errors.map(error => error.message).join(", ");
+                        } else {
+                            status.textContent = "sth wrong submit died with res.";
+                        }
+                    }
+                }
+                catch (error) {
+                    status.innerHTML = "sth went wrong with submitting"
+                }
+                let napis=grid.innerHTML;
+                let napis2=cement.innerHTML;
+                socket.emit('chat-message',napis,napis2,roomid,userid);
+            });
+        </script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var socket = io();
+        </script>
+    </body>
+</html>

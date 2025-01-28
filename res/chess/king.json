@@ -1,0 +1,93 @@
+{
+    "id":"king_1",
+    "name":"King",
+    "aftermove":  [{"ApiCall": ["increase_var", ["new_position","move_count", "1"]]}],
+    "possiblemoves":[
+        {
+            "condition": {"Or": [
+                {"And": [{"Equals": [{"Diff": [{"ApiCall": ["get_x",[""]]}, {"ApiCall": ["get_target_x",[""]]}]},{"Integer": 1}]},{"Equals": [{"Diff": [{"ApiCall": ["get_y",[""]]}, {"ApiCall": ["get_target_y",[""]]}]},{"Integer": 1}]}]},
+                {"And": [{"Equals": [{"Diff": [{"ApiCall": ["get_x",[""]]}, {"ApiCall": ["get_target_x",[""]]}]},{"Integer": 1}]},{"Equals": [{"Diff": [{"ApiCall": ["get_y",[""]]}, {"ApiCall": ["get_target_y",[""]]}]},{"Integer": 0}]}]},
+                {"And": [{"Equals": [{"Diff": [{"ApiCall": ["get_x",[""]]}, {"ApiCall": ["get_target_x",[""]]}]},{"Integer": 0}]},{"Equals": [{"Diff": [{"ApiCall": ["get_y",[""]]}, {"ApiCall": ["get_target_y",[""]]}]},{"Integer": 1}]}]}
+            ]}
+        },
+        {
+            "condition": {
+                "And": [{"Equals": [{"ApiCall": ["get_fvar", ["old_position", "move_count"]]},{"Integer":0}]},
+                    {"Equals": [{"ApiCall": ["get_x",[""]]}, {"Integer": 7}]},
+                    {"Equals": [{"ApiCall": ["get_target_x",[""]]}, {"Integer": 7}]},
+                    {"Equals": [{"ApiCall": ["get_target_y",[""]]}, {"Integer": 6}]},
+                    {"Equals": [{"ApiCall": ["get_pvar", ["7,7", "move_count"]]}, {"Integer": 0}]},
+                    {"ApiCall": ["is_ptype", ["7,7","rook_1"]]},
+                    {"ApiCall": ["is_pempty", ["7,6"]]},
+                    {"ApiCall": ["is_pempty", ["7,5"]]},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,6"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,5"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,4"]]}}
+                ]
+            },
+            "consequences": [{"ApiCall": ["move_piece",["7,7","7,5"]]}]
+        },
+        {
+            "condition": {
+                "And": [{"Equals": [{"ApiCall": ["get_fvar", ["old_position", "move_count"]]},{"Integer":0}]},
+                    {"Equals": [{"ApiCall": ["get_x",[""]]}, {"Integer": 7}]},
+                    {"Equals": [{"ApiCall": ["get_target_x",[""]]}, {"Integer": 7}]},
+                    {"Equals": [{"ApiCall": ["get_target_y",[""]]}, {"Integer": 2}]},
+                    {"Equals": [{"ApiCall": ["get_pvar", ["7,0", "move_count"]]}, {"Integer": 0}]},
+                    {"ApiCall": ["is_ptype", ["7,0", "rook_1"]]},
+                    {"ApiCall": ["is_pempty", ["7,1"]]},
+                    {"ApiCall": ["is_pempty", ["7,2"]]},
+                    {"ApiCall": ["is_pempty", ["7,3"]]},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,2"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,3"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["7,4"]]}}
+                ]
+            },
+            "consequences": [{"ApiCall": ["move_piece",["7,0","7,3"]]}]
+
+        },
+         {
+            "condition": {
+                "And": [{"Equals": [{"ApiCall": ["get_fvar", ["old_position", "move_count"]]},{"Integer":0}]},
+                    {"Equals": [{"ApiCall": ["get_x",[""]]}, {"Integer": 0}]},
+                    {"Equals": [{"ApiCall": ["get_target_x",[""]]}, {"Integer": 0}]},
+                    {"Equals": [{"ApiCall": ["get_target_y",[""]]}, {"Integer": 6}]},
+                    {"Equals": [{"ApiCall": ["get_pvar", ["0,7", "move_count"]]}, {"Integer": 0}]},
+                    {"ApiCall": ["is_ptype", ["0,7", "rook_1"]]},
+                    {"ApiCall": ["is_pempty", ["0,6"]]},
+                    {"ApiCall": ["is_pempty", ["0,5"]]},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,6"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,5"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,4"]]}}
+                ]
+            },
+            "consequences": [{"ApiCall": ["move_piece",["0,7","0,5"]]}]
+
+        },
+        {
+            "condition": {
+                "And": [{"Equals": [{"ApiCall": ["get_fvar", ["old_position", "move_count"]]},{"Integer":0}]},
+                    {"Equals": [{"ApiCall": ["get_x",[""]]}, {"Integer": 0}]},
+                    {"Equals": [{"ApiCall": ["get_target_x",[""]]}, {"Integer": 0}]},
+                    {"Equals": [{"ApiCall": ["get_target_y",[""]]}, {"Integer": 2}]},
+                    {"Equals": [{"ApiCall": ["get_pvar", ["0,0", "move_count"]]}, {"Integer": 0}]},
+                    {"ApiCall": ["is_ptype", ["0,0", "rook_1"]]},
+                    {"ApiCall": ["is_pempty", ["0,1"]]},
+                    {"ApiCall": ["is_pempty", ["0,2"]]},
+                    {"ApiCall": ["is_pempty", ["0,3"]]},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,3"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,4"]]}},
+                    {"Not": {"ApiCall": ["is_posattacked", ["0,2"]]}}
+                ]
+            },
+            "consequences": [{"ApiCall": ["move_piece",["0,0","0,3"]]}]
+
+        }
+    ],
+    "movecondition": {"ApiCall": ["is_ally", ["old_position"]]},
+    "memory":{
+        "move_count":{
+            "Integer":0
+        }
+    }
+}

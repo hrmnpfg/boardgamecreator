@@ -1,0 +1,101 @@
+{
+    "id": "queen_1",
+    "name": "Queen",
+    "possiblemoves": [
+        {
+            "condition":
+                {
+                    "And": [
+                        {
+                            "Equals": [
+                                {
+                                    "Diff": [
+                                        {"ApiCall": ["get_x", [""]]},
+                                        {"ApiCall": ["get_target_x", [""]]}
+                                    ]
+                                },
+                                {
+                                    "Diff": [
+                                        {"ApiCall": ["get_y", [""]]},
+                                        {"ApiCall": ["get_target_y", [""]]}
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_ally", ["new_position"]]
+                            }
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_path_blocked", [""]]
+                            }
+                        },
+                        {
+                            "ApiCall": ["is_different", ["new_position", "old_position"]]
+                        }
+                    ]
+                },
+            "consequences": []
+        },
+        {
+            "condition":{
+                "And":[
+                    {
+                    "And": [
+                        {
+                            "Equals": [
+                                {"ApiCall": ["get_x", [""]]},
+                                {"ApiCall": ["get_target_x", [""]]}
+                            ]
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_path_blocked", [""]]
+                            }
+                        }
+                    ]},
+                    {
+                        "Not": {
+                                "ApiCall": ["is_ally", ["new_position"]]
+                        }
+                    },
+                    {
+                        "ApiCall": ["is_different", ["new_position", "old_position"]]
+                    }
+                ]
+            }
+        },
+        {
+            "condition":{
+                "And": [
+                    {
+                    "And": [
+                        {
+                            "Equals": [
+                                {"ApiCall": ["get_y", [""]]},
+                                {"ApiCall": ["get_target_y", [""]]}
+                            ]
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_path_blocked", [""]]
+                            }
+                        }
+                    ]
+                    },
+                    {
+                        "Not": {
+                            "ApiCall": ["is_ally", ["new_position"]]
+                        }
+                    },
+                    {
+                    "ApiCall": ["is_different", ["new_position", "old_position"]]
+                    }
+                ]
+            }
+        }
+    ],
+    "movecondition": {"ApiCall": ["is_ally", ["old_position"]]}
+}

@@ -1,0 +1,84 @@
+{
+    "id": "knight_1",
+    "name": "NKnight",
+    "possiblemoves": [
+        {
+            "condition":
+                {
+                    "Or":[
+                        {
+                            "And": [
+                                {
+                                    "Equals": [
+                                        {
+                                            "Diff": [
+                                                {"ApiCall": ["get_x", [""]]},
+                                                {"ApiCall": ["get_target_x", [""]]}
+                                            ]
+                                        },
+                                        {
+                                            "Integer": 1
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Not": {
+                                        "ApiCall": ["is_ally", ["new_position"]]
+                                    }
+                                },
+                                {
+                                    "Equals": [
+                                        {
+                                            "Diff": [
+                                                {"ApiCall": ["get_y", [""]]},
+                                                {"ApiCall": ["get_target_y", [""]]}
+                                            ]
+                                        },
+                                        {
+                                            "Integer": 2
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "And": [
+                                {
+                                    "Equals": [
+                                        {
+                                            "Diff": [
+                                                {"ApiCall": ["get_x", [""]]},
+                                                {"ApiCall": ["get_target_x", [""]]}
+                                            ]
+                                        },
+                                        {
+                                            "Integer": 2
+                                        }
+                                    ]
+                                },
+                                {
+                                    "Not": {
+                                        "ApiCall": ["is_ally", ["new_position"]]
+                                    }
+                                },
+                                {
+                                    "Equals": [
+                                        {
+                                            "Diff": [
+                                                {"ApiCall": ["get_y", [""]]},
+                                                {"ApiCall": ["get_target_y", [""]]}
+                                            ]
+                                        },
+                                        {
+                                            "Integer": 1
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+        }
+    ],
+    "movecondition": {"ApiCall": ["is_ally", ["old_position"]]}
+}
