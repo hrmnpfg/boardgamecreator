@@ -137,35 +137,34 @@ div {
     padding: 0 20px;
 }
 
-        </style>
-        <script>
+    </style>
+    <script>
         var socket = io();
         var roomid = '<%= room.room_ID %>';
         socket.emit('join room',roomid);
 </script>
-    </head>
+</head>
     <body class="container">
-        <div class="container">
-            <h1>Create board</h1>
+        <h1>Create Boolean</h1>
 
-            <div>board size: <%=dims[0] %>,<%=dims[1] %></div>
-            <div>history size: <%=history_size %></div>
-            <div>endcondition: <%=endcondition %></div>
-            <div>wincondition for white: <%=winconditions[0]%></div>
-            <div>wincondition for black: <%=winconditions[1]%></div>
-            <div>revive: <%=revive%></div>
+        <div>State: <%=state %></div>
+        <div>
+            <p>Choose value:</p>
             <form method="POST">
-                board size:<br> width:<input type="number" id="boardsize_y" name="boardsize_y" required>height:<input type="number" id="boardsize_x" name="boardsize_x" required>
-                history size: <input type="number" id= history_size name="history_size" required>
-                <button name="choice" value="empty">Set</button>
+              <label>
+                <input type="radio" name="bval" value="true" required> True
+              </label>
+              <label>
+                <input type="radio" name="bval" value="false"> False
+              </label>
+              <button type="submit">Set</button>
             </form>
-            <form method="POST" action="/boardcreator/createrule?room=<%= id %>" >
-                <button type="submit" name="choice" value="endcondition">Create endcondition</button>
-                <button type="submit" name="choice" value="white">Create wincondition for white</button>
-                <button type="submit" name="choice" value="black">Create wincondition for black</button>
-                <button type="submit" name="choice" value="revive">Create revive</button>
-                <button type="submit" name="choice" value="continue">Continue</button>
-            </form>
+        </div>
+
+        <div>
+          <form method="POST" action="/rulecreator/button?room=<%=id %>" >
+            <input type="submit" name="choice" value="cancel">
+          </form>
         </div>
     </body>
 </html>

@@ -8,9 +8,27 @@
 <style>
       .grid {
         display: grid;
-        grid-template-columns: repeat(<%= dims[1]%>, 40px);
+        grid-template-columns: repeat(<%=(parseInt(dims[1])+1)%>, 40px);
         grid-auto-rows: 40px;
         gap: 5px;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .board-container {
+        flex: 0 0 auto;
+      }
+      .form-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       .cell {
         width: 40px;
@@ -25,6 +43,15 @@
         background-color: #4CAF50;
         color: white;
       }
+      .cell.filled-uppercase {
+        background-color: #3498db;
+        color: white;
+        font-weight: bold;
+      }
+      .cell.filled-lowercase {
+        background-color: #4CAF50;
+        color: white;
+      }
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -32,43 +59,159 @@
         var roomid = '<%= room.room_ID %>';
         var userid = '<%= userid %>';
         socket.emit('join room',roomid);
-        socket.on('board', function(data, data2) {
+        socket.on('board', function(data, data2, data3) {
             let pomi = document.getElementById("grid");
             let pom2 = document.getElementById("cement");
+            let pom3 = document.getElementById("currplayer");
             pomi.innerHTML = data;
             pom2.innerHTML = data2;
+            pom3.textContent =  data3;
         });
 
 </script>
 <title>Document</title>
 </head>
-    <body class="container">
+    <script>
+        function pola() {
+            const placement = document.getElementById('placement').value;
+            const sourcecords = document.getElementById('sourcecords');
+            const destcords = document.getElementById('destcords');
+            const cindex = document.getElementById('cementaryindex');
+            const specialfield = document.getElementById('specialfield');
+            if (placement === 'revive') {
+                sourcecords.style.display = 'none';
+                destcords.style.display = 'block';
+                cindex.style.display = 'block';
+                specialfield.style.display = 'none';
+
+                document.getElementById('sxcord').removeAttribute('required');
+                document.getElementById('sycord').removeAttribute('required');
+
+                document.getElementById('dxcord').setAttribute('required', '');
+                document.getElementById('dycord').setAttribute('required', '');
+
+                document.getElementById('cindex').setAttribute('required', '');
+
+                document.getElementById('textfield').removeAttribute('required');
+            } else if (placement === "move"){
+                sourcecords.style.display = 'block';
+                destcords.style.display = 'block';
+                cindex.style.display = 'none';
+                specialfield.style.display = 'none';
+
+                document.getElementById('sxcord').setAttribute('required', '');
+                document.getElementById('sycord').setAttribute('required', '');
+
+                document.getElementById('dxcord').setAttribute('required', '');
+                document.getElementById('dycord').setAttribute('required', '');
+
+                document.getElementById('cindex').removeAttribute('required');
+
+                document.getElementById('textfield').removeAttribute('required');
+            } else {
+                sourcecords.style.display = 'none';
+                destcords.style.display = 'none';
+                cindex.style.display = 'none';
+                specialfield.style.display = 'block';
+
+                document.getElementById('sxcord').removeAttribute('required');
+                document.getElementById('sycord').removeAttribute('required');
+
+                document.getElementById('dxcord').removeAttribute('required');
+                document.getElementById('dycord').removeAttribute('required');
+
+                document.getElementById('cindex').removeAttribute('required');
+
+                document.getElementById('textfield').setAttribute('required', '');
+            }
+
+        }
+        document.addEventListener('DOMContentLoaded', pola);
+    </script>
+
+    <body>
         <header>Boardgames</header>
-        <h1>Obecny stan planszy</h1>
+        <h1>Current board state</h1>
+        <div class="container">
+        <div class="board-container">
         <div class="grid" id="grid">
+            <div class="cell"></div>
+            <% for (let col = 0; col < dims[1]; col++) { %>
+              <div class="cell"><%= col %></div>
+            <% } %>
+
+
         <%
             const rows = board.split('<br>').filter(row => row.trim() !== '');
-            rows.forEach(row => {
-            const cells = row.trim().split(' ');
+            rows.forEach((row, rowIndex) => {
+            const cells = row.trim().split(' ');%>
+            <div class="cell"><%=rowIndex %></div><%
             cells.forEach(cell => {
+                const isUppercase = cell !== '.' && cell === cell.toUpperCase() && cell !== cell.toLowerCase();
         %>
-            <div class="cell <%= cell !== '.' ? 'filled' : '' %>">
+            <div class="cell <%= cell !== '.' ? (isUppercase ? 'filled-uppercase' : 'filled-lowercase') : '' %>">
             <%= cell !== '.' ? cell : '' %>
             </div>
-        <% }); }); %>
+        <% });%>
+        <%}); %>
         </div>
         <div id="cement">
-            White pieces killed: <text id="wc"><%=white_killed%></text></br>
-            Black pieces killed: <text id="bc"><%=black_killed%></text>
+            White cementary: <text id="wc"><%=white_killed%></text></br>
+            Black cementary: <text id="bc"><%=black_killed%></text>
         </div>
-        Gracz: <text><%= username %></text>
-            <form method="POST" id="commands" action="/game2?room=<%= room.room_ID %>">
-                <% if (room) { %>
-                Type a command: <input type="text" name="command" id="command" required/>
-                <button class="openedRoomsButton"> Wyślij </button>
+        <text><%= usercol%></text><br>
+        Playername: <text><%= username %></text><br>
+        Turn: <text id="currplayer"><%=player%></text>
+        <div class="prompt" id="prompt">
+        </div>
+        </div>
+        <div class="form-container">
+        <form method="POST" id="commands" action="/game2?room=<%= room.room_ID %>">
+            <% if (room) { %>
+                <div>
+                    <label for="placement">Placement:</label>
+                    <select id="placement" name="placement" required onchange="pola()">
+                        <option id="mvopt" value="move">Move</option>
+                        <option id="rvopt" value="revive">Revive</option>
+                        <option id="cmdopt" value="textfield" hidden>Command</option>
+                    </select>
+                </div>
+
+                <div id ="sourcecords">
+                    <div>
+                        <label for="sourcexcord">Source vertical coordinate:</label>
+                        <input type="number" id="sycord" name="sYcord" placeholder="source vertical coordinate" required>
+                    </div>
+
+                    <div>
+                        <label for="sourceycord">Source horizontal coordinate:</label>
+                        <input type="number" id="sxcord" name="sXcord" placeholder="source horizontal coordinate" required>
+                    </div>
+                </div>
+                <div id ="destcords">
+                    <div>
+                        <label for="destxcord">Destination vertical coordinate:</label>
+                        <input type="number" id="dycord" name="dYcord" placeholder="destination vertical coordinate" required>
+                    </div>
+
+                    <div>
+                        <label for="ycord">Destination horizontal coordinate:</label>
+                        <input type="number" id="dxcord" name="dXcord" placeholder="destination horizontal coordinate" required>
+                    </div>
+                </div>
+                <div id = "cementaryindex">
+                    <label for="cindex">Cementary index</label>
+                    <input type="number" id="cindex" name="cindex" placeholder="cementary index" required>
+                </div>
+                <div id = "specialfield">
+                    <label for="textfield">Type a command:</label>
+                    <input type="text" name="textfield" id="textfield" required/>
+                </div>
+                <button class="openedRoomsButton"> Send </button>
             <% } %>
         </form>
-        <div class="prompt" id="prompt">
+        </div>
+
         </div>
         <script>
             var form = document.getElementById("commands");
@@ -81,6 +224,7 @@
                 var wc = document.getElementById("wc");
                 var bc = document.getElementById("bc");
                 let cement = document.getElementById("cement");
+                var plr  = document.getElementById("currplayer");
 
                 try {
                     var res = await fetch(event.target.action, {
@@ -93,6 +237,7 @@
                     });
 
                     if (res.ok) {
+                        console.log(res);
                         const data2 = await res.json();
                         console.log(data2);
                         if (data2.redirect) {
@@ -102,16 +247,36 @@
 
                         if(data2.board){
                             grid.innerHTML = "";
+                            const cellDiv = document.createElement("div");
+                            cellDiv.className = "cell";
+                            cellDiv.textContent = " ";
+                            grid.appendChild(cellDiv);
+                            for (let col = 0; col < <%= dims[1] %>; col++) {
+                                const cellDiv = document.createElement("div");
+                                cellDiv.className = "cell";
+                                cellDiv.textContent = col;
+                                grid.appendChild(cellDiv);
+                            }
+
+
+
                             const rows = data2.board.split("<br>").filter(row => row.trim() !== "");
-                            rows.forEach(row => {
+                            rows.forEach((row, rowIndex) => {
+                                const cellDiv = document.createElement("div");
+                                cellDiv.className = `cell`;
+                                cellDiv.textContent = rowIndex;
+                                grid.appendChild(cellDiv);
                                 const cells = row.trim().split(" ");
                                 cells.forEach(cell => {
                                     const cellDiv = document.createElement("div");
-                                    cellDiv.className = `cell ${cell !== "." ? "filled" : ""}`;
+                                    const isUppercase = cell !== '.' && cell === cell.toUpperCase() && cell !== cell.toLowerCase();
+                                    cellDiv.className = `cell ${cell !== '.' ? (isUppercase ? 'filled-uppercase' : 'filled-lowercase') : ''}`;
                                     cellDiv.textContent = cell !== "." ? cell : "";
                                     grid.appendChild(cellDiv);
                                 });
+
                             });
+
                         }
 
                         if(data2.ended){
@@ -121,6 +286,34 @@
                             if(data2.prompt){
                                 prompt.textContent = data2.prompt;
                             }
+                            else{
+                                prompt.textContent = "";
+                            }
+
+                            if(data2.textfield){
+                                // console.log("heeeej we are in a place");
+                                form.reset();
+                                document.getElementById('cmdopt').removeAttribute("hidden");
+                                document.getElementById('placement').value='textfield';
+                                document.getElementById("mvopt").removeAttribute("selected");
+                                document.getElementById("rvopt").removeAttribute("selected");
+                                document.getElementById('cmdopt').setAttribute("selected", "");
+                                document.getElementById('mvopt').setAttribute("hidden", "");
+                                document.getElementById("rvopt").setAttribute("hidden", "");
+                                pola();
+                            }
+                            else{
+                                // console.log("oipuyutyfvkbn;ljpoutirkgh");
+                                form.reset();
+                                document.getElementById("mvopt").removeAttribute("hidden");
+                                document.getElementById("rvopt").removeAttribute("hidden");
+                                document.getElementById('placement').value='move';
+                                document.getElementById("cmdopt").removeAttribute("selected");
+                                document.getElementById("rvopt").removeAttribute("selected");
+                                document.getElementById("mvopt").setAttribute("selected", "");
+                                document.getElementById("cmdopt").setAttribute("hidden", "");
+                                pola();
+                            }
 
                             if(data2.wc){
                                 wc.textContent = data2.wc;
@@ -128,8 +321,12 @@
                             if(data2.bc){
                                 bc.textContent = data2.bc;
                             }
+                            if(data2.player){
+                                plr.textContent = data2.player;
+                            }
                         }
-                        form.reset()
+                        form.reset();
+                        pola();
                     } else {
                         const data = await res.json();
                         if (data.errors) {
@@ -144,7 +341,9 @@
                 }
                 let napis=grid.innerHTML;
                 let napis2=cement.innerHTML;
-                socket.emit('chat-message',napis,napis2,roomid,userid);
+                let napis3=plr.textContent;
+                console.log("napis3: ", napis3);
+                socket.emit('chat-message',napis,napis2,napis3, roomid,userid);
             });
         </script>
         <script src="/socket.io/socket.io.js"></script>

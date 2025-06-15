@@ -138,27 +138,32 @@ div {
 }
 
         </style>
+        <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
     </head>
     <body class="container">
-        <h1>Figury w grze</h1>
+        <h1>Figures in game</h1>
         <br>
          <%= pieces_in_game %>
         </br>
-        <h1>Wybierz figury do gry</h1>
+        <h1>Add figures</h1>
         <ul class="pieces-list">
             <% pieces.forEach(piece => { %>
                 <li>
                     <form method="POST">
-                        <button name="choice" value="<%= piece.id %>">Dodaj: <%= piece.name %></button>
+                        <button name="choice" value="<%= piece.id %>">Add: <%= piece.name %></button>
                     </form>
                 </li>
             <% }); %>
         </ul>
         <form method="POST">
-            <button name="choice" value="empty">Kontynuuj</button>
+            <button name="choice" value="empty">Continue</button>
         </form>
         <form method="POST" action="/roomcreator/pieces/create?room=<%= id %>">
-            <button name="choice" value="empty">Stwórz figurę</button>
+            <button name="choice" value="empty">Create figure</button>
         </form>
         <form method="POST" action="/roomcreator/pieces/upload?room=<%= id %>" enctype="multipart/form-data">
             Upload json: <input type="file" id="file" name="file" accept=".json">

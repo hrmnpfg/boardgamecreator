@@ -1,0 +1,57 @@
+{
+  "id":"disc",
+  "name":"Disc",
+  "aftermove": null,
+  "possiblemoves": [],
+  "movecondition": null,
+  "battlecry": [
+    {"ApiCall": ["clone", ["new_position","new_position2"]]},
+    {"ApiCall": ["get_memory", ["var", "new_position2", "drop"]]}
+  ],
+  "memory":{
+    "drop":{
+      "Pair": [
+        {
+          "Pair": [
+            {"ApiCall": ["clone", ["new_position2","fall_target_position"]]},
+            {"ApiCall": ["create_var_from_mem", ["var","new_position","below_new_position","new_position2"]]}
+          ]
+        },
+        {
+          "If": [
+            {
+                "And":
+                  [
+                    {"ApiCall": ["in_bounds", ["var", "new_position2"]]},
+                    {"ApiCall": ["is_empty", ["var", "new_position2"]]}
+                  ]
+            },
+            {
+                "ApiCall": ["get_memory", ["var", "new_position", "drop"]]
+            },
+            {
+                "ApiCall": ["move_piece", ["var", "new_position", "fall_target_position"]]
+            }
+          ]
+        }
+      ]
+    },
+    "below_new_position":{
+        "Sum": [
+            {
+              "Variable": "new_position2"
+            },
+            {
+              "Pair":[
+                {
+                  "Integer": 1
+                },
+                {
+                  "Integer": 0
+                }
+              ]
+            }
+        ]
+    }
+  }
+}

@@ -138,51 +138,43 @@ div {
 }
 
         </style>
+        <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
     </head>
     <body class="container">
-        <h1>Stwórz zasadę</h1>
+        <h1>Create Rule</h1>
 
-        <div>Stos: <%=stack %></div>
-        <div>Warstwy: <%=layers %></div>
-        <div>Wyrażenia: <%=list%></div>
-        <div>ApiCalls: <%=apicalls%></div>
+        <div>State: <%=state %></div>
         <div>
-            <p>Otwórz wyrażenie:</p>
+            <p>Choose expression:</p>
             <form method="POST">
-            <label for="exprtype">Typ:</label>
+            <label for="exprtype">Type:</label>
               <select id="exprtype" name="exprtype">
-                <option value="And">And</option>
-                <option value="Or">Or</option>
-                <option value="Not">Not</option>
-                <option value="Equals">Equals</option>
-                <option value="If">If</option>
-                <option value="Diff">Diff</option>
-                <oprion value="Pair">Pair</option>
+                <option value="1">Void</option>
+                <option value="2">Boolean</option>
+                <option value="3">Integer</option>
+                <option value="4">Variable</option>
+                <option value="5">ApiCall</option>
+                <option value="6">Pair</option>
+                <option value="7">First</option>
+                <option value="8">Second</option>
+                <option value="9">Diff</option>
+                <option value="10">And</option>
+                <option value="11">Or</option>
+                <option value="12">Not</option>
+                <option value="13">If</option>
+                <option value="14">Equals</option>
+                <option value="15">Sum</option>
               </select>
-              <button type="submit">Otwórz</button>
-            </form>
-        </div>
-
-        <div>
-            <p>Stwórz wartość:</p>
-            <form method="POST" action="/rulecreator/value?room=<%=id %>">
-                <select id="exprtype" name="exprtype" required>
-                    <option value="Integer">Integer</option>
-                    <option value="Variable">Variable</option>
-                    <option value="Boolean">Boolean</option>
-                    <option value="ApiCall">ApiCall</option>
-                    <option value="Void">Void</option>
-                    <option value="Error">Error</option>
-                </select>
-              <input type="text" id="args" name="args" placeholder="">
-              <button type="submit">Stwórz</button>
+              <button type="submit">Open</button>
             </form>
         </div>
 
         <div>
           <form method="POST" action="/rulecreator/button?room=<%=id %>" >
-            <input type="submit" name="choice" value="close">
-            <input type="submit" name="choice" value="export">
             <input type="submit" name="choice" value="cancel">
           </form>
         </div>

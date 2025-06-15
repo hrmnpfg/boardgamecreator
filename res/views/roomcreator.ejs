@@ -8,24 +8,27 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Platforma gier</title>
         <link rel="stylesheet" type="text/css" href="styles.css">
+        <script src="/socket.io/socket.io.js"></script>
+<script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
     </head>
     <body class="container">
         </div>
-            <h1>Wybierz grę</h1>
+            <h1>Choose game</h1>
             <ul>
                 <% games.forEach(game => { %>
                     <li>
                         <form method="POST">
-                            <button name="choice" value="<%= game.id %>">Wybierz: <%= game.name %></button>
+                            <button name="choice" value="<%= game.id %>">Pick: <%= game.name %></button>
                         </form>
                     </li>
                 <% }); %>
             </ul>
-            <form method="POST">
-                <button name="choice" value="empty">Użyj domyślnej planszy</button>
-            </form>
             <form method="POST" action="/roomcreator/create?room=<%= id %>">
-                <button type="submit">Stwórz planszę</button>
+                <button type="submit">Create game</button>
             </form>
             <form method="POST" action="/roomcreator/upload?room=<%= id %>" enctype="multipart/form-data">
                 Load from json: <input type="file" id="file" name="file" accept=".json">

@@ -138,12 +138,17 @@ div {
 }
 
         </style>
+        <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
     </head>
     <body class="container">
-        <h1>Stwórz ruch</h1>
+        <h1>Create move</h1>
 
-        <div>Warunek: <%=cond %></div>
-        <div>Skutek: <%=cons %></div>
+        <div>Condition: <%=cond %></div>
+        <div>Consequence: <%=cons %></div>
 
         <div>
           <form method="POST">

@@ -1,0 +1,61 @@
+{
+    "size": [3,7],
+    "board": [[]],
+    "pieces":{"o": "{\"id\":\"o\",\"name\":\"O\",\"deathrattle\":null,\"battlecry\":null,\"passive\":null,\"onmove\":null,\"aftermove\":null,\"onkill\":null,\"owner\":\"White\",\"possiblemoves\":[{\"condition\":{\"And\":[{\"ApiCall\":[\"is_empty\",[\"new_position\"]]},{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":2}]}]},{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":2}]}]},{\"Not\":{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":2}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":3}]}]}}]},\"consequences\":null}],\"movecondition\":{\"ApiCall\":[\"is_ally\",[\"old_position\"]]}}", "x": "{\"id\":\"x\",\"name\":\"X\",\"deathrattle\":null,\"battlecry\":null,\"passive\":null,\"onmove\":null,\"aftermove\":null,\"onkill\":null,\"owner\":\"White\",\"possiblemoves\":[{\"condition\":{\"And\":[{\"ApiCall\":[\"is_empty\",[\"new_position\"]]},{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_target_x\",[\"\"]]},{\"Integer\":2}]}]},{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_target_y\",[\"\"]]},{\"Integer\":2}]}]},{\"Not\":{\"Or\":[{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":0}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":1}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":2}]},{\"Equals\":[{\"ApiCall\":[\"get_y\",[\"\"]]},{\"Integer\":3}]}]}}]},\"consequences\":null}],\"movecondition\":{\"ApiCall\":[\"is_ally\",[\"old_position\"]]}}"},
+    "cementaries": [[],[]],
+    "global_rules": [],
+    "current_player": {"White": null},
+    "endcondition": {"Or":[
+            {
+                "Not":{
+                "Or":[
+                    {"ApiCall": ["is_pempty", ["0,0"]]},
+                    {"ApiCall": ["is_pempty", ["0,1"]]},
+                    {"ApiCall": ["is_pempty", ["0,2"]]},
+                    {"ApiCall": ["is_pempty", ["1,0"]]},
+                    {"ApiCall": ["is_pempty", ["1,1"]]},
+                    {"ApiCall": ["is_pempty", ["1,2"]]},
+                    {"ApiCall": ["is_pempty", ["2,0"]]},
+                    {"ApiCall": ["is_pempty", ["2,1"]]},
+                    {"ApiCall": ["is_pempty", ["2,2"]]}
+                ]}
+            },
+            {
+                "Or": [
+                    {"ApiCall": ["is_same_line", ["0,0","2,2","owner"]]},
+                    {"ApiCall": ["is_same_line", ["0,2","2,0","owner"]]},
+                    {"ApiCall": ["is_same_line", ["0,0","0,2","owner"]]},
+                    {"ApiCall": ["is_same_line", ["1,0","1,2","owner"]]},
+                    {"ApiCall": ["is_same_line", ["2,0","2,2","owner"]]},
+                    {"ApiCall": ["is_same_line", ["0,0","2,0","owner"]]},
+                    {"ApiCall": ["is_same_line", ["0,1","2,1","owner"]]},
+                    {"ApiCall": ["is_same_line", ["0,2","2,2","owner"]]}
+            ]}
+        ]},
+    "wincondition": [
+        {
+            "Or": [
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","2,2","owner"]]},{"ApiCall": ["is_player", ["0,0","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,2","2,0","owner"]]},{"ApiCall": ["is_player", ["0,2","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","0,2","owner"]]},{"ApiCall": ["is_player", ["0,0","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["1,0","1,2","owner"]]},{"ApiCall": ["is_player", ["1,0","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["2,0","2,2","owner"]]},{"ApiCall": ["is_player", ["2,0","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","2,0","owner"]]},{"ApiCall": ["is_player", ["0,0","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,1","2,1","owner"]]},{"ApiCall": ["is_player", ["0,1","White"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,2","2,2","owner"]]},{"ApiCall": ["is_player", ["0,2","White"]]}]}
+            ]},
+        {
+            "Or": [
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","2,2","owner"]]},{"ApiCall": ["is_player", ["0,0","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,2","2,0","owner"]]},{"ApiCall": ["is_player", ["0,2","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","0,2","owner"]]},{"ApiCall": ["is_player", ["0,0","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["1,0","1,2","owner"]]},{"ApiCall": ["is_player", ["1,0","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["2,0","2,2","owner"]]},{"ApiCall": ["is_player", ["2,0","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,0","2,0","owner"]]},{"ApiCall": ["is_player", ["0,0","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,1","2,1","owner"]]},{"ApiCall": ["is_player", ["0,1","Black"]]}]},
+            {"And": [{"ApiCall": ["is_same_line", ["0,2","2,2","owner"]]},{"ApiCall": ["is_player", ["0,2","Black"]]}]}
+            ]}
+        ],
+    "initialboard":[[null, null, null, null, ["o", "White",1], ["o", "White",2], ["o", "White",3]],[null, null, null, null, ["o", "White",4], ["o", "White",5], ["x", "Black",6]],[null, null, null, null, ["x", "Black",7], ["x", "Black",8], ["x", "Black",9]]],
+    "initialcementaries":[["o", "White",-1], ["o", "Black",-11]]
+}

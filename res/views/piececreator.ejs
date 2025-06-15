@@ -136,9 +136,14 @@ div {
 }
 
         </style>
+        <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
     </head>
     <body class="container">
-        <h1>Stwórz figurę</h1>
+        <h1>Create figure</h1>
 
         <div class="piece-info">
             <ul>
@@ -157,10 +162,10 @@ div {
         </div>
 
         <div class="form-section">
-            <h2>Dodaj właściwość</h2>
+            <h2>Add properties</h2>
             <form method="POST" class="add-property-form">
                 <div class="form-group">
-                    <label for="field">Wybierz właściwość:</label>
+                    <label for="field">Pick property:</label>
                     <select id="field" name="field" class="form-control">
                         <option value="deathrattle">Deathrattle</option>
                         <option value="battlecry">Battlecry</option>
@@ -169,24 +174,34 @@ div {
                         <option value="aftermove">After Move</option>
                         <option value="onkill">On Kill</option>
                         <option value="move">Possible Moves</option>
+                        <option value="memory">Memory</option>
                     </select>
                 </div>
-                <button type="submit" class="btn">Dodaj</button>
+                <button type="submit" class="btn">Add</button>
             </form>
         </div>
 
         <div class="form-section">
-            <h2>Ustaw podstawowe właściwości</h2>
+            <h2>Set basic values</h2>
             <form method="POST" action="/piececreator/set?room=<%=id %>" class="set-properties-form">
                 <div class="form-group">
                     <label for="pid">ID:</label>
                     <input type="text" id="pid" name="pid" required>
                 </div>
                 <div class="form-group">
-                    <label for="pname">Nazwa:</label>
+                    <label for="pname">Name:</label>
                     <input type="text" id="pname" name="pname" required>
                 </div>
-                <button type="submit" class="btn">Ustaw</button>
+                <button type="submit" class="btn">Set</button>
+            </form>
+
+            <h2>Add memory</h2>
+            <form method="POST" action="/piececreator/memory?room=<%=id %>" class="set-properties-form">
+                <div class="form-group">
+                    <label for="name">name:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <button type="submit" class="btn">Set</button>
             </form>
         </div>
 
@@ -195,6 +210,7 @@ div {
                 <input type="submit" name="choice" value="set movecondition" class="btn">
                 <input type="submit" name="choice" value="export" class="btn">
                 <input type="submit" name="choice" value="cancel" class="btn">
+                <input type="submit" name="choice" value="share" class="btn">
             </form>
         </div>
     </body>

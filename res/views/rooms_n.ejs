@@ -193,22 +193,27 @@ div {
     padding: 0 20px;
 }
         </style>
+        <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
 </head>
 
 <body class="intro container">
     <div>
     <% if (room) { %>
          <text>
-            Nazwa pokoju: <%= room.name %>
+            Room name: <%= room.name %>
         </text></br>
         <text>
-            ID pokoju: <%= room.room_ID %>
+            Room ID: <%= room.room_ID %>
         </text></br>
         <% } %>
     </div>
     <div>
-            <text>Witaj w poczekalni</text></br>
-            <text>Odświerz stronę gdy gracz1 stworzy grę by dołączyć</text></br>
+            <text>Welcome to the waiting room!</text></br>
+            <text>Refresh this page when player1 creates the game to join.</text></br>
     </div>
         <script>
             var form = document.getElementById("commands");

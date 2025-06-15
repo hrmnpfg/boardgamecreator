@@ -4,6 +4,7 @@
     "pieces":{"x": "{\"id\": \"x\",\"name\": \"X\",\"deathrattle\": null,\"battlecry\": null,\"passive\": null,\"onmove\": null,\"aftermove\": null,\"onkill\": null,\"owner\": \"White\",\"possiblemoves\": [],\"memory\":{},\"movecondition\": null}", "o": "{\"id\": \"o\",\"name\": \"O\",\"deathrattle\": null,\"battlecry\": null,\"passive\": null,\"onmove\": null,\"aftermove\": null,\"onkill\": null,\"owner\": \"White\",\"possiblemoves\": [],\"memory\":{},\"movecondition\": null}"},
     "cementaries": [[],[]],
     "global_rules": [],
+    "cards": [[],[]],
     "current_player": {"White": null},
     "endcondition": {"Or":[
             {
@@ -57,5 +58,6 @@
             ]}
         ],
     "revive": { "ApiCall": ["is_empty", ["var","new_position"]]},
+    "initialboard": [[null, ["o", "White",10], null], [null, null, null], [["x", "Black",11],null, null]],
     "initialcementaries":[["o", "White",1],["o", "White",2],["o", "White",3],["o", "White",4],["o", "White",5], ["x", "Black",6], ["x", "Black",7], ["x", "Black",8],["x", "Black",9]]
 }

@@ -1,5 +1,5 @@
 {
-    "id":"king_1",
+    "id":"atomic_king",
     "name":"King",
     "aftermove":  [{"ApiCall": ["increase_memory", ["int","var","new_position","move_count", "1"]]}],
     "possiblemoves":[
@@ -17,7 +17,7 @@
                     {"Equals": [{"ApiCall": ["get_target_vertical_cord",[""]]}, {"Integer": 7}]},
                     {"Equals": [{"ApiCall": ["get_target_horizontal_cord",[""]]}, {"Integer": 6}]},
                     {"Equals": [{"ApiCall": ["get_memory", ["pos","7,7", "move_count"]]}, {"Integer": 0}]},
-                    {"ApiCall": ["is_type", ["pos","7,7","rook_1"]]},
+                    {"ApiCall": ["is_type", ["pos","7,7","atomic_rook"]]},
                     {"ApiCall": ["is_empty", ["pos","7,6"]]},
                     {"ApiCall": ["is_empty", ["pos","7,5"]]},
                     {"Not": {"ApiCall": ["is_attacked", ["pos","7,6"]]}},
@@ -34,7 +34,7 @@
                     {"Equals": [{"ApiCall": ["get_target_vertical_cord",[""]]}, {"Integer": 7}]},
                     {"Equals": [{"ApiCall": ["get_target_horizontal_cord",[""]]}, {"Integer": 2}]},
                     {"Equals": [{"ApiCall": ["get_memory", ["pos","7,0", "move_count"]]}, {"Integer": 0}]},
-                    {"ApiCall": ["is_type", ["pos","7,0", "rook_1"]]},
+                    {"ApiCall": ["is_type", ["pos","7,0", "atomic_rook"]]},
                     {"ApiCall": ["is_empty", ["pos","7,1"]]},
                     {"ApiCall": ["is_empty", ["pos","7,2"]]},
                     {"ApiCall": ["is_empty", ["pos","7,3"]]},
@@ -53,7 +53,7 @@
                     {"Equals": [{"ApiCall": ["get_target_vertical_cord",[""]]}, {"Integer": 0}]},
                     {"Equals": [{"ApiCall": ["get_target_horizontal_cord",[""]]}, {"Integer": 6}]},
                     {"Equals": [{"ApiCall": ["get_memory", ["pos","0,7", "move_count"]]}, {"Integer": 0}]},
-                    {"ApiCall": ["is_type", ["pos","0,7", "rook_1"]]},
+                    {"ApiCall": ["is_type", ["pos","0,7", "atomic_rook"]]},
                     {"ApiCall": ["is_empty", ["pos","0,6"]]},
                     {"ApiCall": ["is_empty", ["pos","0,5"]]},
                     {"Not": {"ApiCall": ["is_attacked", ["pos","0,6"]]}},
@@ -71,7 +71,7 @@
                     {"Equals": [{"ApiCall": ["get_target_vertical_cord",[""]]}, {"Integer": 0}]},
                     {"Equals": [{"ApiCall": ["get_target_horizontal_cord",[""]]}, {"Integer": 2}]},
                     {"Equals": [{"ApiCall": ["get_memory", ["pos","0,0", "move_count"]]}, {"Integer": 0}]},
-                    {"ApiCall": ["is_type", ["pos","0,0", "rook_1"]]},
+                    {"ApiCall": ["is_type", ["pos","0,0", "atomic_rook"]]},
                     {"ApiCall": ["is_empty", ["pos","0,1"]]},
                     {"ApiCall": ["is_empty", ["pos","0,2"]]},
                     {"ApiCall": ["is_empty", ["pos","0,3"]]},
@@ -85,7 +85,7 @@
         }
     ],
     "movecondition": {
-        "And": [{"ApiCall": ["is_ally", ["var","old_position"]]},{"Not": {"ApiCall": ["is_ally", ["var","new_position"]]}}]
+        "And": [{"ApiCall": ["is_ally", ["var","old_position"]]},{"ApiCall": ["is_empty", ["var","new_position"]]}]
     },
     "memory":{
         "move_count":{

@@ -15,16 +15,17 @@
     <body class="intro">
         <form method="POST" name="changeusername">
         <text>
-            Podaj nick: <input type="text" name='imie' value='<%= imie%>'/>
+            Enter nickname: <input type="text" name='imie' value='<%= imie%>'/>
         </text>
         </form>
         <form method="POST" name="join room">
             <text>
-                Nowy Pokój: <input type='text' name='newroom' id='btnr' value='<%= newroom%>' />
+                New room: <input type='text' name='newroom' id='btnr' value='<%= newroom%>' />
+                 <button type="submit" class="openedRoomsButton">Create</button>
             </text></br>
 
             <text>
-                Liczba otwartych pokoi: <%= roomnumber %>
+                Open rooms: <%= roomnumber %>
             </text></br>
             <% for (e of roomslist)
             { %>

@@ -183,9 +183,44 @@ div {
     <style>
       .grid {
         display: grid;
-        grid-template-columns: repeat(<%= dims[1]%>, 40px);
+        grid-template-columns: repeat(<%=(parseInt(dims[1])+1)%>, 40px);
         grid-auto-rows: 40px;
         gap: 5px;
+      }
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .board-container {
+        flex: 0 0 auto;
+      }.container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .board-container {
+        flex: 0 0 auto;
+      }
+      .form-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .form-container {
+        flex: 1;
+        min-width: 300px;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       .cell {
         width: 40px;
@@ -200,49 +235,113 @@ div {
         background-color: #4CAF50;
         color: white;
       }
+      .cell.filled-uppercase {
+        background-color: #3498db;
+        color: white;
+        font-weight: bold;
+      }
+      .cell.filled-lowercase {
+        background-color: #4CAF50;
+        color: white;
+      }
     </style>
-    <body class="container">
-        <h1>Obecny stan planszy</h1>
-        <div class="grid">
+
+    <script>
+        function pola() {
+            const placement = document.getElementById('placement').value;
+            const cords = document.getElementById('cords');
+
+            if (placement === 'graveyard') {
+                cords.style.display = 'none';
+                document.getElementById('xcord').removeAttribute('required');
+                document.getElementById('ycord').removeAttribute('required');
+            } else {
+                cords.style.display = 'block';
+                document.getElementById('xcord').setAttribute('required', '');
+                document.getElementById('ycord').setAttribute('required', '');
+            }
+        }
+        document.addEventListener('DOMContentLoaded', pola);
+    </script>
+    <script>
+        var socket = io();
+        var roomid = '<%= room.room_ID %>';
+        socket.emit('join room',roomid);
+</script>
+    <body >
+        <h1>Place figures on board</h1>
+        <div class="container">
+        <div class="board-container">
+        <div class="grid" id="grid">
+            <div class="cell"></div>
+            <% for (let col = 0; col < dims[1]; col++) { %>
+              <div class="cell"><%= col %></div>
+            <% } %>
+
+
         <%
             const rows = board.split('<br>').filter(row => row.trim() !== '');
-            rows.forEach(row => {
-            const cells = row.trim().split(' ');
+            rows.forEach((row, rowIndex) => {
+            const cells = row.trim().split(' '); %>
+            <div class="cell"><%=rowIndex %></div><%
             cells.forEach(cell => {
+                const isUppercase = cell !== '.' && cell === cell.toUpperCase() && cell !== cell.toLowerCase();
         %>
-            <div class="cell <%= cell !== '.' ? 'filled' : '' %>">
+            <div class="cell <%= cell !== '.' ? (isUppercase ? 'filled-uppercase' : 'filled-lowercase') : '' %>">
             <%= cell !== '.' ? cell : '' %>
             </div>
-        <% }); }); %>
+        <% });%>
+        <%}); %>
         </div>
-        <h1>Figury w grze</h1>
+        <div id="cement">
+            White cementary: <text id="wc"><%=white_cm%></text></br>
+            Black cementary: <text id="bc"><%=black_cm%></text>
+        </div>
+        <div class="prompt" id="prompt">
+        </div>
+
+        <h1>Figures in game</h1>
         <br>
          <%= pieces_in_game %>
         </br>
+        </div>
+        <div class="form-container">
+        <form method="POST" id="commands" class="setup-form" action="/roomcreator/setup?room=<%= room.room_ID %>">
 
-        <h1>Ustaw figury na planszy</h1>
-        <form method="POST" class="setup-form">
             <div>
-              <label for="figurename">Nazwa figury:</label>
+                <label for="placement">Placement:</label>
+                <select id="placement" name="placement" required onchange="pola()">
+                    <option value="board">Board</option>
+                    <option value="graveyard">Cementary</option>
+                </select>
+            </div>
+
+            <div>
+              <label for="figurename">figure name:</label>
               <input type="text" id="figurename" name="figureName" placeholder="nazwa figury" required>
             </div>
-            <div>
-              <label for="xcord">Współrzędna y:</label>
-              <input type="text" id="xcord" name="Xcord" placeholder="współrzędna y" required>
+
+            <div id ="cords">
+                <div>
+                    <label for="xcord">vertical coordinate:</label>
+                    <input type="number" id="xcord" name="Xcord" placeholder="vertical coordinate" required>
+                </div>
+
+                <div>
+                    <label for="ycord">horizontal coordinate:</label>
+                    <input type="number" id="ycord" name="Ycord" placeholder="horizontal coordinate" required>
+                </div>
             </div>
             <div>
-              <label for="ycord">Wspołrzędna x:</label>
-              <input type="text" id="ycord" name="Ycord" placeholder="wspołrzędna x" required>
-            </div>
-            <div>
-              <label for="color">Kolor:</label>
+              <label for="color">Color:</label>
               <select id="color" name="color" required>
-                <option value="White">Białe</option>
-                <option value="Black">Czarne</option>
+                <option value="White">White</option>
+                <option value="Black">Black</option>
               </select>
             </div>
             <button type="submit">Place</button>
         </form>
+
 
         <form method="POST" action="/roomcreator/setup/continue?room=<%= room.room_ID %>">
           <button type="submit">Proceed to game</button>
@@ -253,9 +352,109 @@ div {
         </form>
 
         <form method="POST" action="/roomcreator/setup/share?room=<%= room.room_ID %>">
-            <label for="nazwij">Nazwij gre:</label>
+            <label for="nazwij">Name game:</label>
             <input type="text" id="nazwij" name="nazwij" placeholder="my_game" required>
             <button type="submit">Share</button>
         </form>
+        </div>
+        </div>
+
+        <script>
+            var form = document.getElementById("commands");
+            form.addEventListener("submit", async function handleSubmit(event) {
+                event.preventDefault();
+                var grid = document.getElementById("grid");
+                var data = new FormData(event.target);
+                var formDataString = new URLSearchParams(data).toString();
+                var prompt = document.getElementById("prompt");
+                var wc = document.getElementById("wc");
+                var bc = document.getElementById("bc");
+                console.log("pain")
+                try {
+                    var res = await fetch(event.target.action, {
+                        method: form.method,
+                        body: formDataString,
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    });
+
+                    if (res.ok) {
+                        console.log(res);
+                        const data2 = await res.json();
+                        console.log(data2);
+                        if (data2.redirect) {
+                            window.location.href = data2.redirect;
+                            return;
+                        }
+
+                        if(data2.board){
+                            grid.innerHTML = "";
+
+                            const cellDiv = document.createElement("div");
+                            cellDiv.className = "cell";
+                            cellDiv.textContent = "";
+                            grid.appendChild(cellDiv);
+
+                            for (let col = 0; col < <%= dims[1] %>; col++) {
+                                const cellDiv = document.createElement("div");
+                                cellDiv.className = "cell";
+                                cellDiv.textContent = col;
+                                grid.appendChild(cellDiv);
+                            }
+
+                            const rows = data2.board.split("<br>").filter(row => row.trim() !== "");
+                            rows.forEach((row, rowIndex) => {
+                                const cellDiv = document.createElement("div");
+                                cellDiv.className = `cell`;
+                                cellDiv.textContent = rowIndex;
+                                grid.appendChild(cellDiv);
+                                const cells = row.trim().split(" ");
+                                cells.forEach(cell => {
+                                    const cellDiv = document.createElement("div");
+                                    const isUppercase = cell !== '.' && cell === cell.toUpperCase() && cell !== cell.toLowerCase();
+                                    cellDiv.className = `cell ${cell !== '.' ? (isUppercase ? 'filled-uppercase' : 'filled-lowercase') : ''}`;
+                                    cellDiv.textContent = cell !== "." ? cell : "";
+                                    grid.appendChild(cellDiv);
+                                });
+
+                            });
+
+                            if(data2.prompt){
+                                prompt.textContent = data2.prompt;
+                            }
+                            else{
+                                prompt.textContent = ""
+                            }
+
+                            if(data2.wc){
+                                wc.textContent = data2.wc;
+                            }
+                            if(data2.bc){
+                                bc.textContent = data2.bc;
+                            }
+
+                            form.reset()
+                            pola()
+                        }
+                        else{
+                            const data = await res.json();
+                            if (data.errors) {
+                                prompt.textContent = data.errors.map(error => error.message).join(", ");
+                            } else {
+                                prompt.textContent = "sth wrong submit died with res.";
+                            }
+                        }
+
+                    }
+                }
+                catch (error) {
+                    prompt.textContent = "sth went wrong with submitting"
+                }
+
+
+            })
+        </script>
     </body>
 </html>
