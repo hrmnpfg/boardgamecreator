@@ -1,0 +1,83 @@
+{
+    "id": "atomic_bishop",
+    "name": "Bishop",
+    "possiblemoves": [
+        {
+            "condition":
+                {
+                    "And": [
+                        {
+                            "Equals": [
+                                {
+                                    "Diff": [
+                                        {"ApiCall": ["get_vertical_cord", [""]]},
+                                        {"ApiCall": ["get_target_vertical_cord", [""]]}
+                                    ]
+                                },
+                                {
+                                    "Diff": [
+                                        {"ApiCall": ["get_horizontal_cord", [""]]},
+                                        {"ApiCall": ["get_target_horizontal_cord", [""]]}
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_path_blocked", ["old_position","new_position"]]
+                            }
+                        },
+                        {
+                            "Not": {
+                                "ApiCall": ["is_ally", ["var","new_position"]]
+                            }
+                        },
+                        {
+                            "ApiCall": ["is_different", ["new_position", "old_position"]]
+                        }
+                    ]
+                },
+            "consequences": []
+        }
+    ],
+    "onkill": [{"Pair": [{"Pair":[{"Pair": [{"Pair": [
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "-1,0"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]},
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,1"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]}]},{"Pair": [
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "1,0"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]},
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "1,0"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]}]}]},{"Pair": [{"Pair": [
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,-1"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]},
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,-1"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]}]},{"Pair": [
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "-1,0"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]},
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "-1,0"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]}]}]}]},
+
+    {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "1,1"]]},{"If": [{"Not": { "And": [{"Not": {"ApiCall": ["is_empty", ["var", "new_position"]]}},{"ApiCall": ["is_type", ["var", "new_position", "atomic_pawn"]]}] } },{"ApiCall": ["kill", ["var", "new_position"]]},{"Void":null}]}]}]}],
+    "memory": {},
+    "movecondition": {
+        "And": [{"ApiCall": ["is_ally", ["var","old_position"]]},{"Not": {"ApiCall": ["is_ally", ["var","new_position"]]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "1,1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,-1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,-1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "-1,0"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "-1,0"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "1,0"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}},
+
+        {"Second": {"Pair": [{"ApiCall": ["increase_var", ["pair", "new_position", "0,-1"]]},{"If": [{"ApiCall": ["in_bounds", ["var", "new_position"]]},{"Not": {"And": [{"ApiCall": ["is_ally", ["var", "new_position"]]},{"ApiCall": ["is_type", ["var", "new_position", "atomic_king"]]}]}},{"Boolean":true}]}]}} ]
+    }
+}
